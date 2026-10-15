@@ -6,10 +6,10 @@ on:
   workflow_dispatch:
     inputs:
       site_url:
-        description: 'Confirmed HTTPS origin, e.g. https://valentineshishkin.dev'
+        description: 'Confirmed HTTPS origin, e.g. https://valentinshishkin.dev'
         required: false
         type: string
-        default: 'https://valentineshishkin.dev'
+        default: 'https://valentinshishkin.dev'
       base_path:
         description: 'Deployment path: / for a user site or custom domain, /repository/ for a project site'
         required: false
@@ -26,7 +26,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      SITE_URL: ${{ inputs.site_url || 'https://valentineshishkin.dev' }}
+      SITE_URL: ${{ inputs.site_url || 'https://valentinshishkin.dev' }}
       BASE_PATH: ${{ inputs.base_path || '/' }}
       ASTRO_TELEMETRY_DISABLED: '1'
     steps:

@@ -103,7 +103,7 @@ export type Profile = {
 };
 
 export const contact = {
-  website: 'https://valentineshishkin.dev',
+  website: 'https://valentinshishkin.dev',
   email: 'valentinnsh@gmail.com',
   telegram: 'https://t.me/valentinnsh',
   github: 'https://github.com/valentinnsh',
