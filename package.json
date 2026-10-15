@@ -1,0 +1,31 @@
+{
+  "name": "valentinnsh-presence",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "check": "astro check",
+    "build": "astro build",
+    "generate:rtf": "node scripts/generate-rtf.mjs",
+    "generate:pdf": "npm run build && node scripts/generate-pdf.mjs",
+    "generate:docs": "npm run generate:rtf && npm run generate:pdf",
+    "preview": "astro preview --host 127.0.0.1",
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "@fontsource-variable/golos-text": "5.3.0",
+    "astro": "7.3.8"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.64.0",
+    "@types/node": "24.19.2",
+    "pdf-lib": "1.17.1",
+    "typescript": "6.0.3"
+  }
+}

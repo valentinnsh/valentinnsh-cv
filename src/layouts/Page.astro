@@ -1,0 +1,50 @@
+---
+import '@fontsource-variable/golos-text';
+import '../styles/global.css';
+import type { Locale } from '../data/profile';
+
+interface Props {
+  lang?: Locale;
+  title: string;
+  description: string;
+  path?: string;
+  noindex?: boolean;
+}
+const { lang = 'en', title, description, path = '', noindex = false } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const canonical = Astro.site ? new URL(`${base}${path}`, Astro.site).href : undefined;
+const absolute = (path: string) => new URL(`${base}${path}`, Astro.site!).href;
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#fcfcfc" />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <link rel="prefetch" href={`${base}Valentine-Shishkin-CV-EN.pdf`} as="document" />
+    <link rel="prefetch" href={`${base}Valentine-Shishkin-CV-RU.pdf`} as="document" />
+    <link rel="prefetch" href={`${base}Valentine-Shishkin-CV-EN.rtf`} as="document" />
+    <link rel="prefetch" href={`${base}Valentine-Shishkin-CV-RU.rtf`} as="document" />
+    {noindex && <meta name="robots" content="noindex" />}
+    {canonical && !noindex && <>
+      <link rel="canonical" href={canonical} />
+      <link rel="alternate" hreflang="en" href={absolute('en/')} />
+      <link rel="alternate" hreflang="ru" href={absolute('ru/')} />
+      <link rel="alternate" hreflang="x-default" href={absolute('')} />
+      <meta property="og:url" content={canonical} />
+    </>}
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={lang === 'ru' ? 'ru_RU' : 'en_US'} />
+  </head>
+  <body>
+    <slot />
+    <script>
+      import '../scripts/language';
+    </script>
+  </body>
+</html>

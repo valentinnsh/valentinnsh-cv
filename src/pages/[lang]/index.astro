@@ -1,0 +1,332 @@
+---
+import Page from '../../layouts/Page.astro';
+import { profiles, contact, type Locale } from '../../data/profile';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'ru' } }];
+}
+const lang = Astro.params.lang as Locale;
+const p = profiles[lang];
+const base = import.meta.env.BASE_URL;
+---
+<Page lang={lang} title={`${p.name} — ${p.headline}`} description={p.description} path={`${lang}/`}>
+  <a class="skip-link" href="#main-content">{p.labels.skip}</a>
+
+  <main id="main-content" class="container" tabindex="-1">
+    <div class="screen-view">
+    <header class="masthead">
+      <div class="masthead-left">
+        <img
+          src={p.avatarUrl}
+          alt={p.name}
+          class="masthead-avatar"
+          width="48"
+          height="48"
+          loading="eager"
+          decoding="async"
+        />
+        <div class="masthead-info">
+          <span class="masthead-title">
+            <strong>{p.roleShort}</strong>
+          </span>
+          <div class="masthead-meta">
+            <a href={`mailto:${contact.email}`}>{contact.email}</a>
+            <span class="masthead-separator" aria-hidden="true">·</span>
+            <a href={contact.telegram} target="_blank" rel="noopener noreferrer">Telegram</a>
+            <span class="masthead-separator" aria-hidden="true">·</span>
+            <a href={contact.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+            <span class="masthead-separator" aria-hidden="true">·</span>
+            <span class="masthead-location">{p.location}</span>
+          </div>
+        </div>
+      </div>
+      <div class="masthead-controls">
+        <div class="locale-switcher" role="group" aria-label={p.labels.language}>
+          <a
+            href={`${base}en/`}
+            lang="en"
+            hreflang="en"
+            data-language="en"
+            aria-current={lang === 'en' ? 'page' : undefined}
+            aria-label="Switch to English"
+          >
+            EN
+          </a>
+          <a
+            href={`${base}ru/`}
+            lang="ru"
+            hreflang="ru"
+            data-language="ru"
+            aria-current={lang === 'ru' ? 'page' : undefined}
+            aria-label="Переключить на русский"
+          >
+            RU
+          </a>
+        </div>
+        <a
+          class="doc-btn"
+          href={`${base}Valentine-Shishkin-CV-${lang.toUpperCase()}.pdf`}
+          download
+          aria-label={`Download ${p.labels.pdf}`}
+        >
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+          </svg>
+          <span>{p.labels.pdf}</span>
+        </a>
+        <a
+          class="doc-btn"
+          href={`${base}Valentine-Shishkin-CV-${lang.toUpperCase()}.rtf`}
+          download
+          aria-label={`Download ${p.labels.rtf}`}
+        >
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
+          <span>{p.labels.rtf}</span>
+        </a>
+      </div>
+    </header>
+
+    <section class="hero" aria-labelledby="hero-name">
+      <div class="hero-content">
+        <h1 id="hero-name">{p.name}</h1>
+        <p class="hero-subtitle">
+          <strong>{p.headline}</strong> · {p.description}
+        </p>
+      </div>
+    </section>
+
+    <section class="summary-block" aria-label={lang === 'ru' ? 'Обо мне' : 'Summary'}>
+      <p class="summary-text">
+        <span class="summary-lead">{p.summaryLead}</span>
+        <span class="summary-tagline">{p.summaryTagline}</span>
+      </p>
+      <ul class="summary-highlights" role="list">
+        {p.highlights.map((highlight) => (
+          <li><a href={`#${highlight.id}`}>{highlight.text} <span aria-hidden="true">↗</span></a></li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="experience" class="content-section" aria-labelledby="experience-title">
+      <h2 id="experience-title" class="section-label">{p.labels.experience}</h2>
+      <div class="section-content">
+        {p.experience.map((job) => (
+          <article class="experience-entry line-over">
+            <header class="experience-header">
+              <h3 class="experience-role">{job.title}</h3>
+              <p class="experience-company">{job.employer}</p>
+              <p class="experience-dates">{job.dates}</p>
+            </header>
+            <p>{job.description}</p>
+            <ul class="experience-bullets">
+              {job.details.map((detail) => (
+                <li>{detail}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="work" class="content-section" aria-labelledby="work-title">
+      <h2 id="work-title" class="section-label">{p.labels.work}</h2>
+      <div class="section-content">
+        {p.work.map((work) => (
+          <article id={work.id} class="work-entry line-over">
+            <header class="work-header">
+              <p class="work-eyebrow">{work.focus}</p>
+              <h3 class="work-title">{work.title}</h3>
+            </header>
+            <p class="work-summary">{work.summary}</p>
+            <div class="case-details">
+              <div class="case-item">
+                <strong>{p.labels.contribution}:</strong> {work.contribution}
+              </div>
+              {work.outcome && <div class="case-item">
+                <strong>{work.outcomeLabel}:</strong> {work.outcome}
+              </div>}
+            </div>
+            <div class="work-tags" aria-label="Technologies used">
+              {work.technologies.map((tech) => (
+                <span class="skill-tag">{tech}</span>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="skills" class="content-section skills" aria-labelledby="skills-title">
+      <h2 id="skills-title" class="section-label">{p.labels.skills}</h2>
+      <div class="section-content">
+        {p.skills.map((category) => (
+          <div class="skills-category line-over">
+            <h3 class="skills-title">{category.title}</h3>
+            <ul class="skills-list" role="list">
+              {category.tags.map((tag) => (
+                <li class="skill-tag">{tag}</li>
+              ))}
+            </ul>
+            {category.note && <p class="skills-note">{category.note}</p>}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section id="education" class="content-section education" aria-labelledby="education-title">
+      <h2 id="education-title" class="section-label">{p.labels.education}</h2>
+      <div class="section-content">
+        {p.degrees.map((degree) => (
+          <div class="education-entry line-over">
+            <h3 class="education-degree">{degree.degree} · {degree.program}</h3>
+            <p class="education-school">{p.university}, {p.faculty}</p>
+            <p class="education-dates">{degree.year}</p>
+          </div>
+        ))}
+        <div class="education-note line-over">
+          <p>{p.research}</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="languages" class="content-section languages-section" aria-labelledby="languages-title">
+      <h2 id="languages-title" class="section-label">{p.labels.languages}</h2>
+      <div class="section-content">
+        {p.languages.map((language) => (
+          <div class="language-item">
+            <span class="language-name">{language.name}</span>
+            <span class="language-level">{language.level}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section id="projects" class="content-section" aria-labelledby="projects-title">
+      <h2 id="projects-title" class="section-label">{p.labels.projects}</h2>
+      <div class="section-content">
+        {p.projects.map((project) => (
+          <article class="project-entry line-over">
+            <h3 class="project-title">{project.url ? <a href={project.url}>{project.title} ↗</a> : project.title}</h3>
+            <p class="project-desc">{project.description}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="contact" class="content-section" aria-labelledby="contact-title">
+      <h2 id="contact-title" class="section-label">{p.labels.contact}</h2>
+      <div class="section-content contact-block">
+        <h3 class="contact-heading">{p.contactTitle}</h3>
+        <p class="contact-desc">{p.contactDescription}</p>
+        <div class="contact-links">
+          <a class="contact-primary-btn" href={`mailto:${contact.email}`}>
+            <span>{p.labels.email}</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+          <div class="contact-secondary-links">
+            <a href={contact.telegram} target="_blank" rel="noopener noreferrer">Telegram ↗</a>
+            <a href={contact.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <article class="print-cv" aria-label={p.name}>
+      <header class="print-header">
+        <div class="print-header-top">
+          <div class="print-name">{p.name}</div>
+          <div class="print-headline">{p.roleShort}</div>
+        </div>
+        <div class="print-contacts">
+          <a class="print-contact-item" href={`mailto:${contact.email}`}>{contact.email}</a>
+          <span class="print-sep">·</span>
+          <a class="print-contact-item" href={contact.telegram}>t.me/valentinnsh</a>
+          <span class="print-sep">·</span>
+          <a class="print-contact-item" href={contact.github}>github.com/valentinnsh</a>
+          <span class="print-sep">·</span>
+          <span class="print-contact-item">{p.location}</span>
+          <span class="print-sep">·</span>
+          <a class="print-contact-item" href={`${contact.website}/${lang}/`}>{new URL(contact.website).hostname}</a>
+        </div>
+      </header>
+
+      <section class="print-summary">
+        <p class="print-summary-text">{p.summaryLead} {p.summaryTagline}</p>
+      </section>
+
+      <section class="print-section">
+        <h2 class="print-section-title">{p.printCv.sectionTitles.experience}</h2>
+        <div class="print-jobs">
+          {p.printCv.jobs.map((job) => (
+            <div class="print-job">
+              <div class="print-job-header">
+                <span class="print-job-role"><strong>{job.role}</strong></span>
+                <span class="print-job-dates">{job.dates}</span>
+              </div>
+              <div class="print-job-company">{job.company}</div>
+              <div class="print-job-meta">{job.meta}</div>
+              <ul class="print-job-bullets">
+                {job.highlights.map((h) => (
+                  <li>
+                    <strong>{h.label}:</strong> {h.text}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="print-section">
+        <h2 class="print-section-title">{p.printCv.sectionTitles.skills}</h2>
+        <div class="print-skills-grid">
+          {p.printCv.skills.map((s) => (
+            <div class="print-skill-row">
+              <span class="print-skill-label">{s.category}:</span>
+              <span class="print-skill-items">{s.items}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="print-section print-bottom-grid">
+        <div class="print-bottom-col">
+          <h2 class="print-section-title">{p.printCv.sectionTitles.education}</h2>
+          <div class="print-edu">
+            <div class="print-edu-school"><strong>{p.printCv.education.school}</strong></div>
+            <div class="print-edu-sub">{p.printCv.education.faculty}</div>
+            <ul class="print-edu-degrees">
+              {p.printCv.education.degrees.map((deg) => (
+                <li>{deg}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div class="print-bottom-col">
+          <h2 class="print-section-title">{p.printCv.sectionTitles.languages}</h2>
+          <div class="print-lang">
+            <p class="print-lang-item">{p.printCv.languagesAndProjects.languages}</p>
+            <p class="print-lang-item">{p.printCv.languagesAndProjects.project}</p>
+            <p class="print-lang-item"><a href={p.printCv.languagesAndProjects.projectUrl}>github.com/valentinnsh/SkyHelperV2</a></p>
+          </div>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="page-footer">
+    <div class="container">
+      <div class="page-footer-inner">
+        <span><strong>{p.name}</strong> · {p.headline}</span>
+        <span>{p.labels.updated} · <a href="#main-content">{p.labels.top} ↑</a></span>
+      </div>
+    </div>
+  </footer>
+</Page>

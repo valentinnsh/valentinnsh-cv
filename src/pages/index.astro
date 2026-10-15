@@ -1,0 +1,16 @@
+---
+import Page from '../layouts/Page.astro';
+const base = import.meta.env.BASE_URL;
+---
+<Page title="Valentine Shishkin — Software Engineer" description="Professional profile in English and Russian. Профессиональный профиль на русском и английском.">
+  <main class="chooser" data-language-root data-base={base}>
+    <p class="wordmark">valentinnsh<span aria-hidden="true">.</span></p>
+    <h1>Valentine Shishkin</h1>
+    <p lang="ru">Валентин Шишкин</p>
+    <p>Fullstack Software Engineer <span aria-hidden="true">/</span> <span lang="ru">Fullstack-разработчик</span></p>
+    <nav class="chooser-links" aria-label="Choose a language / Выберите язык">
+      <a href={`${base}en/`} lang="en" hreflang="en" data-language="en">English <span aria-hidden="true">→</span></a>
+      <a href={`${base}ru/`} lang="ru" hreflang="ru" data-language="ru">Русский <span aria-hidden="true">→</span></a>
+    </nav>
+  </main>
+</Page>
